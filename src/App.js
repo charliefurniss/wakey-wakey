@@ -12,6 +12,20 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState({});
 
+  const fetchData = async () => {
+    try {
+      const response = await fetch(
+        'https://api.tfl.gov.uk/line/mode/overground,tube/status'
+      );
+      const data = await response.json();
+      setDisplayTravelInfo(filterLines(data, linesToCheck));
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+      setError(error);
+    }
+  };
+
   const handleLineCheckboxCheck = lineId => {
     if (!linesToCheck.includes(lineId)) {
       setLinesToCheck([...linesToCheck, lineId]);
@@ -23,19 +37,11 @@ function App() {
     }
   };
 
+  const handleRefresh = () => {
+    fetchData();
+  };
+
   useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await fetch(
-          'https://api.tfl.gov.uk/line/mode/overground,tube/status'
-        );
-        const data = await response.json();
-        setDisplayTravelInfo(filterLines(data, linesToCheck));
-        setIsLoading(false);
-      } catch (error) {
-        setError(error);
-      }
-    }
     fetchData();
   }, [linesToCheck]);
 
@@ -53,7 +59,10 @@ function App() {
         </div>
       </header>
 
-      <Drawer handleLineCheckboxCheck={handleLineCheckboxCheck} />
+      <Drawer
+        handleLineCheckboxCheck={handleLineCheckboxCheck}
+        handleRefresh={handleRefresh}
+      />
       <StyledMain className='mdl-layout__content'>
         <div className='page-layout'>
           <div className='page-content'>

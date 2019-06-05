@@ -1,61 +1,63 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
-class Drawer extends Component {
-  constructor(props) {
-    super(props);
+function Drawer({ handleLineCheckboxCheck, handleRefresh }) {
+  const [isLoading, setIsLoading] = useState(true);
+  const [lines, setLines] = useState([]);
+  const [error, setError] = useState({});
 
-    this.state = {
-      isLoading: true,
-      lines: []
-    };
-  }
-
-  componentDidMount() {
+  useEffect(() => {
     fetch('https://api.tfl.gov.uk/line/mode/overground,tube')
       .then(response => response.json())
       .then(lines => {
-        this.setState({
-          lines: lines,
-          isLoading: false
-        });
+        setLines(lines);
+        setIsLoading(false);
       })
-      .catch(error => this.setState({ error, isLoading: false }));
-  }
+      .catch(error => {
+        setError(error);
+        setIsLoading(false);
+      });
+  });
 
-  render() {
-    const { lines, error, isLoading } = this.state;
-
-    return (
-      <React.Fragment>
-        {error ? <p>{error.message}</p> : null}
-        <div className='mdl-layout__drawer'>
-          <DrawerContent>
-            <h5>Select lines</h5>
-            <Inputs numberOfLines={lines.length}>
-              {!isLoading &&
-                lines.map(line => {
-                  return (
-                    <InputWrapper key={line.id}>
+  return (
+    <React.Fragment>
+      {error ? <p>{error.message}</p> : null}
+      <div className='mdl-layout__drawer'>
+        <DrawerContent>
+          <h5>Select lines</h5>
+          <Inputs numberOfLines={lines.length}>
+            {!isLoading &&
+              lines.map(line => {
+                return (
+                  <InputWrapper key={line.id}>
+                    <label
+                      className='mdl-checkbox mdl-js-checkbox  mdl-js-ripple-effect'
+                      htmlFor={`${line.id}Checkbox`}
+                    >
                       <input
                         id={`${line.id}Checkbox`}
                         name={`${line.id}Checkbox`}
                         type='checkbox'
                         value={line.id}
-                        onClick={() =>
-                          this.props.handleLineCheckboxCheck(line.id)
-                        }
+                        className='mdl-checkbox__input'
+                        onClick={() => handleLineCheckboxCheck(line.id)}
                       />
-                      <label htmlFor={`${line.id}Checkbox`}>{line.name}</label>
-                    </InputWrapper>
-                  );
-                })}
-            </Inputs>
-          </DrawerContent>
-        </div>
-      </React.Fragment>
-    );
-  }
+                      <span className='mdl-checkbox__label'>{line.name}</span>
+                    </label>
+                  </InputWrapper>
+                );
+              })}
+          </Inputs>
+          <button
+            className='mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent'
+            onClick={handleRefresh}
+          >
+            Refresh
+          </button>
+        </DrawerContent>
+      </div>
+    </React.Fragment>
+  );
 }
 
 const DrawerContent = styled.div`
