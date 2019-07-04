@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 import './app.css';
 
+import AirQuality from './components/air-quality';
 import TravelInformation from './components/travel-information';
 import Drawer from './components/drawer';
 
@@ -66,6 +67,7 @@ function App() {
       <StyledMain className='mdl-layout__content'>
         <div className='page-layout'>
           <div className='page-content'>
+            <AirQuality />
             <h2>Travel</h2>
             {error ? <p>{error.message}</p> : null}
             {!isLoading && displayTravelInfo.length > 0 ? (

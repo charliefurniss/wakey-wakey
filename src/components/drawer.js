@@ -20,7 +20,7 @@ function Drawer({ handleLineCheckboxCheck, handleRefresh }) {
   });
 
   return (
-    <React.Fragment>
+    <>
       {error ? <p>{error.message}</p> : null}
       <div className='mdl-layout__drawer'>
         <DrawerContent>
@@ -56,7 +56,7 @@ function Drawer({ handleLineCheckboxCheck, handleRefresh }) {
           </button>
         </DrawerContent>
       </div>
-    </React.Fragment>
+    </>
   );
 }
 
