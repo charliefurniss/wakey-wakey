@@ -1,47 +1,45 @@
 import React from 'react';
-import styled from 'styled-components';
+
+import DashboardWidget from './../common/dashboard-widget';
+import { warningColours } from '../utilities/warning-colours';
 
 const TravelInformation = ({ travelInfo }) => {
   return (
-    <TravelInfo>
+    <>
       {travelInfo.map((line, index) => (
         <React.Fragment key={index}>
-          <h3>{line.name}</h3>
           {line.lineStatuses.length > 0 &&
             line.lineStatuses.map(status => {
               return status.statusSeverity < 10 ? (
-                <TravelDetails key={status.id}>
-                  <h4>{status.statusSeverityDescription}</h4>
-                  <p>{status.reason}</p>
-                </TravelDetails>
+                <DashboardWidget
+                  key={status.id}
+                  heading={line.name}
+                  warning={status.statusSeverityDescription}
+                  details={status.reason}
+                  validFrom={status.validityPeriods[0]}
+                  warningColour={colourSet[status.statusSeverityDescription]}
+                />
               ) : (
-                <TravelDetails key={status.id}>
-                  <h4 key={status.id}>Good service</h4>
-                </TravelDetails>
+                <DashboardWidget
+                  key={status.id}
+                  heading={line.name}
+                  warning={'Good'}
+                  details={status.reason}
+                  warningColour={colourSet['Low']}
+                />
               );
             })}
-          <StyledHr />
         </React.Fragment>
       ))}
-    </TravelInfo>
+    </>
   );
 };
 
-const TravelInfo = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-`;
-
-const TravelDetails = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-`;
-
-const StyledHr = styled.hr`
-  width: 300px;
-`;
+const colourSet = {
+  Low: warningColours.low,
+  Moderate: warningColours.moderate,
+  High: warningColours.high,
+  'Very High': warningColours.veryHigh
+};
 
 export default TravelInformation;

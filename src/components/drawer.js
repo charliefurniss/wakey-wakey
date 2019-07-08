@@ -21,7 +21,6 @@ function Drawer({ handleLineCheckboxCheck, handleRefresh }) {
 
   return (
     <>
-      {error ? <p>{error.message}</p> : null}
       <div className='mdl-layout__drawer'>
         <DrawerContent>
           <h5>Select lines</h5>

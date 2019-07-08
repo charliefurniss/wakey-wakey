@@ -6,20 +6,5 @@
 .app-layout .mdl-layout__header,
 .app-layout .mdl-layout__drawer-button {
   color: white;
-  background-color: #282c34;
-}
-
-main {
-  text-align: center;
-}
-
-.page-layout {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-height: 100vh;
-}
-
-.page-content {
-  max-width: 768px;
+  background-color: #171819;
 }

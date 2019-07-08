@@ -8,7 +8,10 @@ import TravelInformation from './components/travel-information';
 import Drawer from './components/drawer';
 
 function App() {
-  const [linesToCheck, setLinesToCheck] = useState([]);
+  const [linesToCheck, setLinesToCheck] = useState([
+    'london-overground',
+    'victoria'
+  ]);
   const [displayTravelInfo, setDisplayTravelInfo] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState({});
@@ -65,25 +68,29 @@ function App() {
         handleRefresh={handleRefresh}
       />
       <StyledMain className='mdl-layout__content'>
-        <div className='page-layout'>
-          <div className='page-content'>
-            <AirQuality />
-            <h2>Travel</h2>
-            {error ? <p>{error.message}</p> : null}
-            {!isLoading && displayTravelInfo.length > 0 ? (
-              <TravelInformation travelInfo={displayTravelInfo} />
-            ) : (
-              <h3>Loading...</h3>
-            )}
-          </div>
-        </div>
+        <PageContent>
+          <AirQuality />
+          {!isLoading && displayTravelInfo.length > 0 ? (
+            <TravelInformation travelInfo={displayTravelInfo} />
+          ) : (
+            <h3>Loading...</h3>
+          )}
+        </PageContent>
       </StyledMain>
     </div>
   );
 }
 
 const StyledMain = styled.main`
-  margin-left: ;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const PageContent = styled.section`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
 `;
 
 const filterLines = (lines, linesToCheck) => {

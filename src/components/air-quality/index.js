@@ -1,12 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
 
 import DashboardWidget from './../common/dashboard-widget';
-
-const GREEN = '#4caf50';
-const AMBER = '#ff9800';
-const RED = '#ff5722';
-const PURPLE = '#673ab7';
+import { warningColours } from '../utilities/warning-colours';
 
 function AirQuality() {
   const [isLoading, setIsLoading] = useState(true);
@@ -30,18 +25,15 @@ function AirQuality() {
 
   return (
     <>
-      {error ? <p>{error.message}</p> : null}
       {!isLoading &&
       airQuality.currentForecast &&
       airQuality.currentForecast.length ? (
-        <Card className='mdl-card'>
-          <DashboardWidget
-            heading={'Air quality'}
-            indicator={forecastBand}
-            details={airQuality.currentForecast[0].forecastText}
-            indicatorColour={colourSet[forecastBand]}
-          />
-        </Card>
+        <DashboardWidget
+          heading={'Air quality'}
+          warning={forecastBand}
+          details={airQuality.currentForecast[0].forecastText}
+          warningColour={colourSet[forecastBand]}
+        />
       ) : (
         <div class='mdl-spinner mdl-js-spinner is-active' />
       )}
@@ -49,15 +41,11 @@ function AirQuality() {
   );
 }
 
-const Card = styled.div`
-  text-align: left;
-`;
-
 const colourSet = {
-  Low: GREEN,
-  Moderate: AMBER,
-  High: RED,
-  'Very High': PURPLE
+  Low: warningColours.low,
+  Moderate: warningColours.moderate,
+  High: warningColours.high,
+  'Very High': warningColours.veryHigh
 };
 
 export default AirQuality;
