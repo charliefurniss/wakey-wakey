@@ -4,6 +4,7 @@ import DashboardWidget from './../common/dashboard-widget';
 import { warningColours } from '../utilities/warning-colours';
 
 const TravelInformation = ({ travelInfo }) => {
+  console.log(travelInfo);
   return (
     <>
       {travelInfo.map((line, index) => (
@@ -17,15 +18,15 @@ const TravelInformation = ({ travelInfo }) => {
                   warning={status.statusSeverityDescription}
                   details={status.reason}
                   validFrom={status.validityPeriods[0]}
-                  warningColour={colourSet[status.statusSeverityDescription]}
+                  warningColour={setWarningColour(status.statusSeverity)}
                 />
               ) : (
                 <DashboardWidget
                   key={status.id}
                   heading={line.name}
-                  warning={'Good'}
+                  warning={'Good service'}
                   details={status.reason}
-                  warningColour={colourSet['Low']}
+                  warningColour={setWarningColour(status.statusSeverity)}
                 />
               );
             })}
@@ -35,11 +36,22 @@ const TravelInformation = ({ travelInfo }) => {
   );
 };
 
-const colourSet = {
-  Low: warningColours.low,
-  Moderate: warningColours.moderate,
-  High: warningColours.high,
-  'Very High': warningColours.veryHigh
+const setWarningColour = statusSeverity => {
+  let warningColour = warningColours.low;
+
+  if (statusSeverity === 1) {
+    warningColour = warningColours.veryHigh;
+  }
+
+  if ((statusSeverity > 1) & (statusSeverity < 5)) {
+    warningColour = warningColours.high;
+  }
+
+  if ((statusSeverity >= 5) & (statusSeverity < 10)) {
+    warningColour = warningColours.moderate;
+  }
+
+  return warningColour;
 };
 
 export default TravelInformation;

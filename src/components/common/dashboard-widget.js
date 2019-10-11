@@ -7,7 +7,7 @@ import { getTimeSinceReported } from './../utilities/time';
 function DashboardWidget({
   heading,
   warning,
-  details,
+  details = false,
   validFrom,
   warningColour
 }) {

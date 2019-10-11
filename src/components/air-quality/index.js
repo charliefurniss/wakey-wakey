@@ -35,7 +35,7 @@ function AirQuality() {
           warningColour={colourSet[forecastBand]}
         />
       ) : (
-        <div class='mdl-spinner mdl-js-spinner is-active' />
+        <div className='mdl-spinner mdl-js-spinner is-active' />
       )}
     </>
   );

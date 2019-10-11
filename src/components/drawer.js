@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
-function Drawer({ handleLineCheckboxCheck, handleRefresh }) {
+function Drawer({ handleLineCheckboxCheck }) {
   const [isLoading, setIsLoading] = useState(true);
   const [lines, setLines] = useState([]);
   const [error, setError] = useState({});
@@ -28,31 +28,24 @@ function Drawer({ handleLineCheckboxCheck, handleRefresh }) {
             {!isLoading &&
               lines.map(line => {
                 return (
-                  <InputWrapper key={line.id}>
-                    <label
-                      className='mdl-checkbox mdl-js-checkbox  mdl-js-ripple-effect'
-                      htmlFor={`${line.id}Checkbox`}
-                    >
-                      <input
-                        id={`${line.id}Checkbox`}
-                        name={`${line.id}Checkbox`}
-                        type='checkbox'
-                        value={line.id}
-                        className='mdl-checkbox__input'
-                        onClick={() => handleLineCheckboxCheck(line.id)}
-                      />
-                      <span className='mdl-checkbox__label'>{line.name}</span>
-                    </label>
-                  </InputWrapper>
+                  <label
+                    className='mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect'
+                    htmlFor={`${line.id}Checkbox`}
+                    key={line.id}
+                  >
+                    <input
+                      id={`${line.id}Checkbox`}
+                      name={`${line.id}Checkbox`}
+                      type='checkbox'
+                      value={line.id}
+                      className='mdl-checkbox__input'
+                      onClick={() => handleLineCheckboxCheck(line.id)}
+                    />
+                    <span className='mdl-checkbox__label'>{line.name}</span>
+                  </label>
                 );
               })}
           </Inputs>
-          <button
-            className='mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent'
-            onClick={handleRefresh}
-          >
-            Refresh
-          </button>
         </DrawerContent>
       </div>
     </>
@@ -66,16 +59,6 @@ const DrawerContent = styled.div`
 const Inputs = styled.div`
   display: flex;
   flex-direction: column;
-`;
-
-const InputWrapper = styled.div`
-  margin-bottom: 12px;
-  input {
-    margin: 0;
-  }
-  label {
-    margin-left: 4px;
-  }
 `;
 
 export default Drawer;
