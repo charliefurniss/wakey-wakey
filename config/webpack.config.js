@@ -24,15 +24,15 @@ const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
 const ForkTsCheckerWebpackPlugin = require('react-dev-utils/ForkTsCheckerWebpackPlugin');
 const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
 
-const { watch } = require('chokidar');
+// const { watch } = require('chokidar');
 
-const { startGraphQLServer } = require('@wakey-wakey/marshal');
+// const { startGraphQLServer } = require('@wakey-wakey/marshal');
 
-const decache = /** @type {import('decache').default} */ (require('decache'));
+// const decache = /** @type {import('decache').default} */ (require('decache'));
 
-const { marshalEndpoint } = '/marshal';
+// const { marshalEndpoint } = '/marshal';
 
-const PACKAGES_ROOT = path.join(__dirname, '../../');
+// const PACKAGES_ROOT = path.join(__dirname, '../../');
 
 // Source maps are resource heavy and can cause out of memory issue for large source files.
 const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
@@ -608,34 +608,34 @@ module.exports = function(webpackEnv) {
     },
     // Turn off performance processing because we utilize
     // our own hints via the FileSizeReporter
-    performance: false,
-    devServer: {
-      disableHostCheck: true,
-      historyApiFallback: true,
-      before: app => {
-        let middleware;
-        function clearMiddleware() {
-          middleware = undefined;
-          // decache('@wakeywakey/marshal');
-        }
-        const watcher = watch(['**/*'], { cwd: PACKAGES_ROOT });
-        watcher
-          .on('add', clearMiddleware)
-          .on('change', clearMiddleware)
-          .on('unlink', clearMiddleware);
-        app.use(marshalEndpoint, async (req, res, next) => {
-          try {
-            await require('./load-dev-secrets').load();
-            if (typeof middleware === 'undefined') {
-              middleware = await startGraphQLServer();
-            }
-          } catch (err) {
-            res.status(500).send(err.stack);
-            console.error(err.stack); // eslint-disable-line no-console
-          }
-          middleware && middleware(req, res, next);
-        });
-      }
-    }
+    performance: false
+    // devServer: {
+    //   disableHostCheck: true,
+    //   historyApiFallback: true,
+    //   before: app => {
+    //     let middleware;
+    //     function clearMiddleware() {
+    //       middleware = undefined;
+    //       // decache('@wakeywakey/marshal');
+    //     }
+    //     const watcher = watch(['**/*'], { cwd: PACKAGES_ROOT });
+    //     watcher
+    //       .on('add', clearMiddleware)
+    //       .on('change', clearMiddleware)
+    //       .on('unlink', clearMiddleware);
+    //     app.use(marshalEndpoint, async (req, res, next) => {
+    //       try {
+    //         await require('./load-dev-secrets').load();
+    //         if (typeof middleware === 'undefined') {
+    //           middleware = await startGraphQLServer();
+    //         }
+    //       } catch (err) {
+    //         res.status(500).send(err.stack);
+    //         console.error(err.stack); // eslint-disable-line no-console
+    //       }
+    //       middleware && middleware(req, res, next);
+    //     });
+    //   }
+    // }
   };
 };
