@@ -7,6 +7,7 @@ import AirQuality from './components/air-quality';
 import PollenCount from './components/pollen-count';
 import TravelInformation from './components/travel-information';
 import Drawer from './components/drawer';
+import PostViewer from './components/post-viewer';
 
 function App() {
   const [linesToCheck, setLinesToCheck] = useState([]);
@@ -65,6 +66,7 @@ function App() {
       <Drawer handleLineCheckboxCheck={handleLineCheckboxCheck} />
       <StyledMain className='mdl-layout__content'>
         <PageContent>
+          <PostViewer />
           <AirQuality />
           <PollenCount />
           {/* {!isLoading && displayTravelInfo.length > 0 && (

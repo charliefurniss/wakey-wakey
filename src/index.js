@@ -4,18 +4,8 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { ApolloProvider } from 'react-apollo';
-import { ApolloClient } from 'apollo-client';
-import { createHttpLink } from 'apollo-link-http';
-import { InMemoryCache } from 'apollo-cache-inmemory';
 
-const httpLink = createHttpLink({
-  uri: 'http://localhost:4000'
-});
-
-const client = new ApolloClient({
-  link: httpLink,
-  cache: new InMemoryCache()
-});
+import client from './apollo';
 
 ReactDOM.render(
   <ApolloProvider client={client}>
@@ -28,3 +18,6 @@ ReactDOM.render(
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();
+
+// Ensures that just the components changing within the app will refresh as you update them, rather than refreshing the entire page.
+if (module.hot) module.hot.accept();

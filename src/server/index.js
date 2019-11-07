@@ -10,11 +10,11 @@ const POSTS = [
 ];
 
 const schema = buildASTSchema(gql`
-  type: Query {
-    getPosts: [POST]
-    getPost(id: ID!): POST
+  type Query {
+    posts: [Post]
+    post(id: ID!): Post
   }
-  
+
   type Post {
     id: ID
     author: String
@@ -25,14 +25,14 @@ const schema = buildASTSchema(gql`
 const mapPost = (post, id) => post && { id, ...post };
 
 const root = {
-  getPosts: () => POSTS.map(mapPost),
-  getPost: ({ id }) => mapPost(POSTS[id], id)
+  posts: () => POSTS.map(mapPost),
+  post: ({ id }) => mapPost(POSTS[id], id)
 };
 
 const app = express();
 app.use(cors());
 app.use(
-  'graphql',
+  '/graphql',
   graphqlHTTP({
     schema,
     rootValue: root,
