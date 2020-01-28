@@ -6,9 +6,8 @@ const { buildASTSchema } = require('graphql');
 const fetch = require('node-fetch');
 
 const getAirQuality = async () => {
-  const airQualityData = await fetch('https://api.tfl.gov.uk/airquality')
-    .then(res => res.json())
-    .then(json => json);
+  const result = await fetch('https://api.tfl.gov.uk/airquality');
+  const airQualityData = await result.json();
 
   const forecast = {
     band: airQualityData.currentForecast[0].forecastBand,
@@ -27,7 +26,7 @@ const schema = buildASTSchema(gql`
   type Query {
     posts: [Post]
     post(id: ID!): Post
-    air: AirQuality
+    airQuality: AirQuality
   }
 
   type Post {
@@ -47,10 +46,11 @@ const mapPost = (post, id) => post && { id, ...post };
 const root = {
   posts: () => POSTS.map(mapPost),
   post: ({ id }) => mapPost(POSTS[id], id),
-  air: () => getAirQuality()
+  airQuality: async () => await getAirQuality()
 };
 
 const app = express();
+
 app.use(cors());
 app.use(
   '/graphql',

@@ -1,45 +1,38 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import gql from 'graphql-tag';
+import { Query } from 'react-apollo';
 
 import DashboardWidget from './../common/dashboard-widget';
 import { warningColours } from '../utilities/warning-colours';
 
-function AirQuality() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [airQuality, setAirQuality] = useState([]);
-  const [forecastBand, setForecastBand] = useState('Low');
-  const [error, setError] = useState({});
+const GET_AIR_QUALITY = gql`
+  query GetAirQuality {
+    airQuality {
+      band
+      summary
+    }
+  }
+`;
 
-  useEffect(() => {
-    fetch('https://api.tfl.gov.uk/airquality')
-      .then(response => response.json())
-      .then(data => {
-        setAirQuality(data);
-        setForecastBand(data.currentForecast[0].forecastBand);
-        setIsLoading(false);
-      })
-      .catch(error => {
-        setError(error);
-        setIsLoading(false);
-      });
-  });
-
+const AirQuality = () => {
   return (
-    <>
-      {!isLoading &&
-      airQuality.currentForecast &&
-      airQuality.currentForecast.length ? (
-        <DashboardWidget
-          heading={'Air quality'}
-          warning={forecastBand}
-          details={airQuality.currentForecast[0].forecastText}
-          warningColour={colourSet[forecastBand]}
-        />
-      ) : (
-        <div className='mdl-spinner mdl-js-spinner is-active' />
-      )}
-    </>
+    <Query query={GET_AIR_QUALITY}>
+      {({ loading, error, data }) => {
+        if (loading)
+          return <div className='mdl-spinner mdl-js-spinner is-active' />;
+        if (error) return <h1>Error</h1>;
+        return (
+          <DashboardWidget
+            heading={'Air quality'}
+            warning={data.airQuality.band}
+            details={data.airQuality.summary}
+            warningColour={colourSet[data.airQuality.band]}
+          />
+        );
+      }}
+    </Query>
   );
-}
+};
 
 const colourSet = {
   Low: warningColours.low,
