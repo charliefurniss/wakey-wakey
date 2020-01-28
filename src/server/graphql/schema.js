@@ -6,6 +6,7 @@ const schema = buildASTSchema(gql`
     posts: [Post]
     post(id: ID!): Post
     airQuality: AirQuality
+    lineStatuses: [LineStatus]
   }
 
   type Post {
@@ -17,6 +18,10 @@ const schema = buildASTSchema(gql`
   type AirQuality {
     band: String
     summary: String
+  }
+
+  type LineStatus {
+    reason: String
   }
 `);
 
