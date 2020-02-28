@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 import './app.css';
 
+import NavBar from './components/nav-bar';
 import AirQuality from './components/air-quality';
 import PollenCount from './components/pollen-count';
 import TravelInformation from './components/travel-information';
@@ -26,18 +27,7 @@ function App() {
 
   return (
     <div className='app-layout mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-drawer'>
-      <header className='mdl-layout__header mdl-layout__header--transparent'>
-        <div className='mdl-layout__header-row'>
-          <span className='mdl-layout-title'>Wakey wakey</span>
-          <div className='mdl-layout-spacer' />
-          <nav className='mdl-navigation'>
-            <a className='mdl-navigation__link' href='/'>
-              Link
-            </a>
-          </nav>
-        </div>
-      </header>
-
+      <NavBar />
       <Drawer handleLineCheckboxCheck={handleLineCheckboxCheck} />
       <StyledMain className='mdl-layout__content'>
         <PageContent>
