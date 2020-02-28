@@ -1,38 +1,40 @@
 import React from 'react';
+import gql from 'graphql-tag';
+import { Query } from 'react-apollo';
 
 import DashboardWidget from './../common/dashboard-widget';
 import { warningColours } from '../utilities/warning-colours';
 
-const TravelInformation = ({ travelInfo }) => {
-  console.log(travelInfo);
+const GET_LINE_STATUSES = gql`
+  query GetLineStatuses {
+    lineStatuses {
+      lineName
+      reason
+      severity
+      description
+    }
+  }
+`;
+
+const TravelInformation = () => {
   return (
-    <>
-      {travelInfo.map((line, index) => (
-        <React.Fragment key={index}>
-          {line.lineStatuses.length > 0 &&
-            line.lineStatuses.map(status => {
-              return status.statusSeverity < 10 ? (
-                <DashboardWidget
-                  key={status.id}
-                  heading={line.name}
-                  warning={status.statusSeverityDescription}
-                  details={status.reason}
-                  validFrom={status.validityPeriods[0]}
-                  warningColour={setWarningColour(status.statusSeverity)}
-                />
-              ) : (
-                <DashboardWidget
-                  key={status.id}
-                  heading={line.name}
-                  warning={'Good service'}
-                  details={status.reason}
-                  warningColour={setWarningColour(status.statusSeverity)}
-                />
-              );
-            })}
-        </React.Fragment>
-      ))}
-    </>
+    <Query query={GET_LINE_STATUSES}>
+      {({ loading, error, data }) => {
+        if (loading)
+          return <div className='mdl-spinner mdl-js-spinner is-active' />;
+        if (error) return <h1>Error</h1>;
+        return data.lineStatuses.map((status, index) => (
+          <DashboardWidget
+            key={index}
+            heading={status.lineName}
+            warning={status.description}
+            details={status.reason}
+            // validFrom={status.validityPeriods[0]}
+            warningColour={setWarningColour(status.severity)}
+          />
+        ));
+      }}
+    </Query>
   );
 };
 

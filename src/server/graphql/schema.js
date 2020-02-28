@@ -21,7 +21,10 @@ const schema = buildASTSchema(gql`
   }
 
   type LineStatus {
+    lineName: String
     reason: String
+    severity: Int
+    description: String
   }
 `);
 
