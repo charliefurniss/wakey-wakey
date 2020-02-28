@@ -6,7 +6,7 @@ const getLineStatuses = async () => {
   );
   const lineStatuses = await result.json();
 
-  // Note need to sort the status.lineStatuses by severity code
+  // TODO: return the relevant status from status.lineStatuses after sorting by the severity code
   return lineStatuses.map(status => {
     const statusToReport = status.lineStatuses[0];
     return {
