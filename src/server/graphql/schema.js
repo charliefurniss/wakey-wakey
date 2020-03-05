@@ -5,6 +5,8 @@ const schema = buildASTSchema(gql`
   type Query {
     airQuality: AirQuality
     lineStatuses: [LineStatus]
+    pollenCount: PollenCount
+    weatherForecast: WeatherForecast
   }
 
   type AirQuality {
@@ -12,11 +14,29 @@ const schema = buildASTSchema(gql`
     summary: String
   }
 
+  type PollenCount {
+    status_code: String
+  }
+
   type LineStatus {
     lineName: String
     reason: String
     severity: Int
     description: String
+  }
+
+  type WeatherForecast {
+    forecastNow: Forecast
+    forecastToday: Forecast
+  }
+
+  type Forecast {
+    summary: String
+    temperature: Float
+    temperatureHigh: Float
+    temperatureLow: Float
+    feelsLike: Float
+    icon: String
   }
 `);
 
