@@ -23,7 +23,7 @@ const AirQuality = () => {
         if (error) return <h1>Error</h1>;
         return (
           <DashboardWidget
-            heading={'Air quality'}
+            heading={'Pollution'}
             warning={data.airQuality.band}
             details={data.airQuality.summary}
             warningColour={colourSet[data.airQuality.band]}
