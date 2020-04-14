@@ -1,6 +1,6 @@
 import React from 'react';
 import gql from 'graphql-tag';
-import { Query } from 'react-apollo';
+import { useQuery } from 'react-apollo';
 
 import DashboardWidget from './../common/dashboard-widget';
 import { colours } from '../utilities/core-colours';
@@ -25,28 +25,23 @@ const GET_WEATHER_FORECAST = gql`
 `;
 
 const WeatherForecast = () => {
-  return (
-    <Query query={GET_WEATHER_FORECAST}>
-      {({ loading, error, data }) => {
-        if (loading)
-          return <div className='mdl-spinner mdl-js-spinner is-active' />;
-        if (error) return <h1>{error}</h1>;
+  const { loading, error, data } = useQuery(GET_WEATHER_FORECAST);
 
-        const forecastNow = data.weatherForecast.forecastNow;
-        return (
-          <DashboardWidget
-            heading={'Weather'}
-            warning={forecastNow.summary}
-            numeric={forecastNow.temperature}
-            details={'data.forecastNow.summary'}
-            warningColour={colourSet[forecastNow.icon].background}
-            warningTextColour={
-              colourSet[forecastNow.icon].text || colours.primaryText
-            }
-          />
-        );
-      }}
-    </Query>
+  if (loading) return <div className='mdl-spinner mdl-js-spinner is-active' />;
+  if (error) return <h1>{error}</h1>;
+
+  const forecastNow = data.weatherForecast.forecastNow;
+  return (
+    <DashboardWidget
+      heading={'Weather'}
+      warning={forecastNow.summary}
+      numeric={forecastNow.temperature}
+      details={'data.forecastNow.summary'}
+      warningColour={colourSet[forecastNow.icon].background}
+      warningTextColour={
+        colourSet[forecastNow.icon].text || colours.primaryText
+      }
+    />
   );
 };
 
@@ -61,12 +56,12 @@ const colourSet = {
   cloudy: { background: colours.lightGrey, text: colours.secondaryText },
   'partly-cloudy-day': {
     background: colours.lightGrey,
-    text: colours.secondaryText
+    text: colours.secondaryText,
   },
   'partly-cloudy-night': {
     background: colours.lightGrey,
-    text: colours.secondaryText
-  }
+    text: colours.secondaryText,
+  },
 };
 
 export default WeatherForecast;
