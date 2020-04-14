@@ -1,14 +1,14 @@
 import React from 'react';
 import gql from 'graphql-tag';
-import { Query } from 'react-apollo';
+import { useQuery } from 'react-apollo';
 
 import DashboardWidget from './../common/dashboard-widget';
 import { warningColours } from '../utilities/warning-colours';
 
 const GET_LINE_STATUSES = gql`
-  query GetLineStatuses {
-    lineStatuses {
-      lineName
+  query GetLineStatuses($lineIds: String!) {
+    lineStatuses(lineIds: $lineIds) {
+      name
       reason
       severity
       description
@@ -16,29 +16,29 @@ const GET_LINE_STATUSES = gql`
   }
 `;
 
-const TravelInformation = () => {
-  return (
-    <Query query={GET_LINE_STATUSES}>
-      {({ loading, error, data }) => {
-        if (loading)
-          return <div className='mdl-spinner mdl-js-spinner is-active' />;
-        if (error) return <h1>Error</h1>;
-        return data.lineStatuses.map((status, index) => (
-          <DashboardWidget
-            key={index}
-            heading={status.lineName}
-            warning={status.description}
-            details={status.reason}
-            // validFrom={status.validityPeriods[0]}
-            warningColour={setWarningColour(status.severity)}
-          />
-        ));
-      }}
-    </Query>
-  );
+const TravelInformation = ({ linesToCheck }) => {
+  const { loading, error, data } = useQuery(GET_LINE_STATUSES, {
+    variables: {
+      lineIds: linesToCheck,
+    },
+  });
+
+  if (loading) return <div className='mdl-spinner mdl-js-spinner is-active' />;
+  if (error) return <h1>Error</h1>;
+
+  return data.lineStatuses.map((status, index) => (
+    <DashboardWidget
+      key={index}
+      heading={status.name}
+      warning={status.description}
+      details={status.reason}
+      // validFrom={status.validityPeriods[0]}
+      warningColour={setWarningColour(status.severity)}
+    />
+  ));
 };
 
-const setWarningColour = statusSeverity => {
+const setWarningColour = (statusSeverity) => {
   let warningColour = warningColours.low;
 
   if (statusSeverity === 1) {

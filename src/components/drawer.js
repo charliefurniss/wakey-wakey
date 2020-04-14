@@ -1,54 +1,50 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import gql from 'graphql-tag';
 import styled from 'styled-components';
+import { useQuery } from 'react-apollo';
+
+const GET_LINES = gql`
+  query GetLines {
+    lines {
+      name
+      id
+    }
+  }
+`;
 
 function Drawer({ handleLineCheckboxCheck }) {
-  const [isLoading, setIsLoading] = useState(true);
-  const [lines, setLines] = useState([]);
-  const [error, setError] = useState({});
+  const { loading, error, data } = useQuery(GET_LINES);
 
-  useEffect(() => {
-    fetch('https://api.tfl.gov.uk/line/mode/overground,tube')
-      .then(response => response.json())
-      .then(lines => {
-        setLines(lines);
-        setIsLoading(false);
-      })
-      .catch(error => {
-        setError(error);
-        setIsLoading(false);
-      });
-  });
+  if (loading) return <div className='mdl-spinner mdl-js-spinner is-active' />;
+  if (error) return <h1>{error}</h1>;
 
   return (
-    <>
-      <div className='mdl-layout__drawer'>
-        <DrawerContent>
-          <h5>Select lines</h5>
-          <Inputs numberOfLines={lines.length}>
-            {!isLoading &&
-              lines.map(line => {
-                return (
-                  <label
-                    className='mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect'
-                    htmlFor={`${line.id}Checkbox`}
-                    key={line.id}
-                  >
-                    <input
-                      id={`${line.id}Checkbox`}
-                      name={`${line.id}Checkbox`}
-                      type='checkbox'
-                      value={line.id}
-                      className='mdl-checkbox__input'
-                      onClick={() => handleLineCheckboxCheck(line.id)}
-                    />
-                    <span className='mdl-checkbox__label'>{line.name}</span>
-                  </label>
-                );
-              })}
-          </Inputs>
-        </DrawerContent>
-      </div>
-    </>
+    <div className='mdl-layout__drawer'>
+      <DrawerContent>
+        <h5>Select lines</h5>
+        <Inputs numberOfLines={data.lines.length}>
+          {data.lines.map((line) => {
+            return (
+              <label
+                className='mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect'
+                htmlFor={`${line.id}Checkbox`}
+                key={line.id}
+              >
+                <input
+                  id={`${line.id}Checkbox`}
+                  name={`${line.id}Checkbox`}
+                  type='checkbox'
+                  value={line.id}
+                  className='mdl-checkbox__input'
+                  onClick={() => handleLineCheckboxCheck(line.id)}
+                />
+                <span className='mdl-checkbox__label'>{line.name}</span>
+              </label>
+            );
+          })}
+        </Inputs>
+      </DrawerContent>
+    </div>
   );
 }
 
