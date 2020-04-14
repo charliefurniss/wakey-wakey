@@ -7,9 +7,11 @@ import { getTimeSinceReported } from './../utilities/time';
 function DashboardWidget({
   heading,
   warning,
-  details = false,
+  numeric = null,
+  details = null,
   validFrom,
-  warningColour
+  warningColour,
+  warningTextColour
 }) {
   const [showDetails, setShowDetails] = useState(false);
   return (
@@ -17,13 +19,17 @@ function DashboardWidget({
       <Title className='mdl-card__title'>
         <h4 className='mdl-card__title-text'>{heading}</h4>
       </Title>
-      <WarningContainer backgroundColour={warningColour}>
+      <WarningContainer
+        color={warningTextColour}
+        backgroundColour={warningColour}
+      >
         <Warning>{warning}</Warning>
         {validFrom && validFrom.isNow && (
           <WarningTime>
             {`${getTimeSinceReported(validFrom.fromDate)} ago`}
           </WarningTime>
         )}
+        <Numeric>{numeric}</Numeric>
       </WarningContainer>
       <ButtonContainer className='mdl-card__actions'>
         <button
@@ -47,6 +53,7 @@ const DashboardContainer = styled.div`
   background-color: ${colours.lighterBackground};
   color: ${colours.primaryText};
   margin: 12px;
+  border-radius: 8px;
 `;
 
 const Title = styled.div`
@@ -55,18 +62,18 @@ const Title = styled.div`
 
 const WarningContainer = styled.div`
   background-color: ${({ backgroundColour }) => `${backgroundColour}`};
+  color: ${({ color }) => `${color}`};
   font-size: 24px;
   height: 60px;
   padding: 8px 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  > span {
-    color: ${colours.primaryText};
-  }
 `;
 
-const Warning = styled.div``;
+const Warning = styled.span``;
+
+const Numeric = styled.span``;
 
 const WarningTime = styled.div`
   font-size: 12px;
