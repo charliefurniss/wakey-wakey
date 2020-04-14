@@ -4,7 +4,8 @@ const { buildASTSchema } = require('graphql');
 const schema = buildASTSchema(gql`
   type Query {
     airQuality: AirQuality
-    lineStatuses: [LineStatus]
+    lineStatuses(lineIds: String!): [LineStatus]
+    lines: [Line]
     pollenCount: PollenCount
     weatherForecast: WeatherForecast
   }
@@ -19,10 +20,15 @@ const schema = buildASTSchema(gql`
   }
 
   type LineStatus {
-    lineName: String
+    name: String
     reason: String
     severity: Int
     description: String
+  }
+
+  type Line {
+    id: String
+    name: String
   }
 
   type WeatherForecast {
@@ -32,10 +38,10 @@ const schema = buildASTSchema(gql`
 
   type Forecast {
     summary: String
-    temperature: Float
-    temperatureHigh: Float
-    temperatureLow: Float
-    feelsLike: Float
+    temperature: String
+    temperatureHigh: String
+    temperatureLow: String
+    feelsLike: String
     icon: String
   }
 `);
