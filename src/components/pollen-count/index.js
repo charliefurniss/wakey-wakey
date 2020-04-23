@@ -1,14 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 
 import DashboardWidget from '../common/dashboard-widget';
 import { warningColours } from '../utilities/warning-colours';
 
 function PollenCount() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [pollenCount, setPollenCount] = useState([]);
-  const [forecastBand, setForecastBand] = useState('Low');
-
-  const dummyData = {
+  const pollenCount = {
     status_code: '200 OK',
     date: '2019-07-12T14:35:06+00:00',
     forecast: [
@@ -62,23 +58,14 @@ function PollenCount() {
     //     setError(error);
     //     setIsLoading(false);
     //   });
-    setPollenCount(dummyData);
-    setForecastBand(dummyData.forecast[3].pollen_count);
-    setIsLoading(false);
   });
 
   return (
-    <>
-      {!isLoading && pollenCount && pollenCount.forecast.length ? (
-        <DashboardWidget
-          heading={'Pollen Count'}
-          warning={forecastBand}
-          warningColour={colourSet[forecastBand]}
-        />
-      ) : (
-        <div className='mdl-spinner mdl-js-spinner is-active' />
-      )}
-    </>
+    <DashboardWidget
+      heading={'Pollen Count'}
+      warning={pollenCount.forecast[3].pollen_count}
+      warningColour={colourSet['Moderate']}
+    />
   );
 }
 
