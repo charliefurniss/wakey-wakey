@@ -2,7 +2,7 @@ import React from 'react';
 import gql from 'graphql-tag';
 import { useQuery } from 'react-apollo';
 
-import { SunshineIcon } from './icons';
+import { SunshineIcon, RainIcon, CloudyIcon } from './icons';
 
 import DashboardWidget from './../common/dashboard-widget';
 import { colours } from '../utilities/core-colours';
@@ -42,9 +42,30 @@ const WeatherForecast = () => {
       warningTextColour={
         colourSet[forecastNow.icon].text || colours.primaryText
       }
-      icon={<SunshineIcon />}
+      icon={setIcon(forecastNow.icon)}
     />
   );
+};
+
+const setIcon = (iconKey) => {
+  let icon;
+  switch (iconKey) {
+    case 'clear-day':
+    case 'clear-night':
+      icon = <SunshineIcon />;
+      break;
+    case 'rain':
+    case 'snow':
+    case 'sleet':
+      icon = <RainIcon />;
+      break;
+
+    default:
+      icon = <CloudyIcon />;
+      break;
+  }
+
+  return icon;
 };
 
 const colourSet = {

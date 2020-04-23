@@ -7,7 +7,6 @@ const SunshineIcon = () => {
       focusable='false'
       data-prefix='fas'
       data-icon='sun'
-      class='svg-inline--fa fa-sun fa-w-16'
       role='img'
       viewBox='0 0 512 512'
       height='24px'
