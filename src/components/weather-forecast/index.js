@@ -2,6 +2,8 @@ import React from 'react';
 import gql from 'graphql-tag';
 import { useQuery } from 'react-apollo';
 
+import { SunshineIcon } from './icons';
+
 import DashboardWidget from './../common/dashboard-widget';
 import { colours } from '../utilities/core-colours';
 
@@ -34,13 +36,13 @@ const WeatherForecast = () => {
   return (
     <DashboardWidget
       heading={'Weather'}
-      warning={forecastNow.summary}
       numeric={forecastNow.temperature}
       details={'data.forecastNow.summary'}
       warningColour={colourSet[forecastNow.icon].background}
       warningTextColour={
         colourSet[forecastNow.icon].text || colours.primaryText
       }
+      icon={<SunshineIcon />}
     />
   );
 };

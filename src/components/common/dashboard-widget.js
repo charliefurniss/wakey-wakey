@@ -6,12 +6,13 @@ import { getTimeSinceReported } from './../utilities/time';
 
 function DashboardWidget({
   heading,
-  warning,
+  warning = null,
   numeric = null,
   details = null,
   validFrom,
   warningColour,
-  warningTextColour
+  warningTextColour,
+  icon = null,
 }) {
   const [showDetails, setShowDetails] = useState(false);
   return (
@@ -23,7 +24,7 @@ function DashboardWidget({
         color={warningTextColour}
         backgroundColour={warningColour}
       >
-        <Warning>{warning}</Warning>
+        <Warning>{warning || icon}</Warning>
         {validFrom && validFrom.isNow && (
           <WarningTime>
             {`${getTimeSinceReported(validFrom.fromDate)} ago`}
