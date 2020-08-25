@@ -1,9 +1,9 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
 import './../../app.css';
 
-import { AppContext } from './../../contexts/app-context';
+import { useAppContext } from './../../contexts/app-context';
 
 import NavBar from './../nav-bar';
 import AirQuality from './../air-quality';
@@ -12,13 +12,13 @@ import TravelInformation from './../travel-information';
 import WeatherForecast from './../weather-forecast';
 import Drawer from './../drawer';
 
-const AppContent = ({ handleLineCheckboxCheck }) => {
-  const { linesToCheck } = useContext(AppContext);
+const AppContent = () => {
+  const { linesToCheck } = useAppContext();
 
   return (
     <div className='app-layout mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-drawer'>
       <NavBar />
-      <Drawer handleLineCheckboxCheck={handleLineCheckboxCheck} />
+      <Drawer />
       <StyledMain className='mdl-layout__content'>
         <PageContent>
           <AirQuality />
